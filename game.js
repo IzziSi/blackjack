@@ -23,49 +23,47 @@ var createDeck = _numberOfDecks;
 
 //   Players
 
-var player1 = {
-    name: 'Heuy',
-    money: 200,
-    card1: '',
-    card2: '',
-    card1value: '',
-    card2value: '',
-    card1Suit: '',
-    card2Suit: ''
-};
+var players = [{
+        name: 'Heuy',
+        money: 200,
+        card1: '',
+        card2: '',
+        card1value: '',
+        card2value: '',
+        card1Suit: '',
+        card2Suit: ''
+    }, {
+        name: 'Dewey',
+        money: 200,
+        card1: '',
+        card2: '',
+        card1value: '',
+        card2value: '',
+        card1Suit: '',
+        card2Suit: ''
+    }, {
+        name: 'Lewey',
+        money: 200,
+        card1: '',
+        card2: '',
+        card1value: '',
+        card2value: '',
+        card1Suit: '',
+        card2Suit: ''
+    },
+    {
+        name: 'Scrooge',
+        money: 200,
+        card1: '',
+        card2: '',
+        card1value: '',
+        card2value: '',
+        card1Suit: '',
+        card2Suit: ''
+    }
+];
 
-var player2 = {
-    name: 'Dewey',
-    money: 200,
-    card1: '',
-    card2: '',
-    card1value: '',
-    card2value: '',
-    card1Suit: '',
-    card2Suit: ''
-};
 
-var player3 = {
-    name: 'Lewey',
-    money: 200,
-    card1: '',
-    card2: '',
-    card1value: '',
-    card2value: '',
-    card1Suit: '',
-    card2Suit: ''
-};
-
-var player4 = {
-name: 'Scrooge',
-money: 200,
-card1: '',
-card2: '',
-    card1value: '',
-    card2value: '',
-    card1Suit: '',
-    card2Suit: ''
-};
 var dealer = {
     name: 'Dealer',
     money: null,
@@ -75,8 +73,7 @@ var dealer = {
     card2value: '',
     card1Suit: '',
     card2Suit: ''
-};
-
+}
 var p1Total;
 var p2Total;
 var p3Total;
@@ -154,6 +151,8 @@ var selectSecondCard = cards[Math.floor(Math.random() * cards.length)];
 
 function dealCards(player, total) {
     if (selectCard.active === true && selectSecondCard.active === true) {
+        selectCard = cards[Math.floor(Math.random() * cards.length)];
+        selectSecondCard = cards[Math.floor(Math.random() * cards.length)];
         selectCard.active = false;
         selectSecondCard.active = false;
     } else {
@@ -184,28 +183,46 @@ function dealCards(player, total) {
 }
  */
 
-function evaluateCards() {
-    while (_rounds > 0) {
-        dealCards(dealer.name, dealer.total);
-        dealer.card1 = selectCard.name;
-        dealer.card2 = selectSecondCard.name;
-        dealer.card1value = selectCard.value;
-        dealer.card2value = selectSecondCard.value;
-        dealer.card1Suit = selectCard.suit;
-        dealer.card2Suit = selectSecondCard.suit;
-        dealerTotal = selectCard.value+ selectSecondCard.value; 
-        console.log(dealCards(player1.name, p1Total));
-        p1Total = selectCard.value+ selectSecondCard.value;
-        player1.card2 = selectSecondCard.name;
-        player1.card1 = selectCard.name;
-        player1.card1value = selectCard.value;
-        player1.card2value = selectSecondCard.value;
-        player1.card1Suit = selectCard.suit;
-        player1.card2Suit = selectSecondCard.suit;
-        p1Total = selectCard.value+ selectSecondCard.value; 
-        console.log(dealer.name + "'s first card is " + dealer.card1 + " of " + dealer.card1Suit +  ". " + player1.name + " has a hand of " + player1.card1 +  " of " + player1.card1Suit +  " and " + player1.card2 +  " of " + player1.card2Suit +  " with a total value of: " + p1Total);
-             _rounds--;
-    }
+function dealToDealer() {
+    dealCards(dealer.name, dealer.total);
+    dealer.card1 = selectCard.name;
+    dealer.card2 = selectSecondCard.name;
+    dealer.card1value = selectCard.value;
+    dealer.card2value = selectSecondCard.value;
+    dealer.card1Suit = selectCard.suit;
+    dealer.card2Suit = selectSecondCard.suit;
+    dealerTotal = selectCard.value + selectSecondCard.value;
 }
 
-evaluateCards();
+function dealToPlayers() {
+    players.forEach(player => {
+            selectCard = cards[Math.floor(Math.random() * cards.length)];
+            selectSecondCard = cards[Math.floor(Math.random() * cards.length)];
+            selectCard.active = false;
+            selectSecondCard.active = false;
+            player.card2 = selectSecondCard.name;
+            player.card1 = selectCard.name;
+            player.card1value = selectCard.value;
+            player.card2value = selectSecondCard.value;
+            player.card1Suit = selectCard.suit;
+            player.card2Suit = selectSecondCard.suit;
+            player.total = selectCard.value + selectSecondCard.value;
+            console.log(player.name + " has a hand of " + player.card1 + " of " + player.card1Suit + " and " + player.card2 + " of " + player.card2Suit + " with a total value of: " + player.total);
+        }
+    }
+
+
+    function evaluateCards() {
+        while (_rounds > 0) {
+            dealToDealer();
+            console.log(dealer.name + "'s first card is " + dealer.card1 + " of " + dealer.card1Suit + ". ");
+            _rounds--;
+        }
+    }
+
+    evaluateCards();
+
+
+    /*
+    create player array
+    use foreach to evaluateCards per person */

@@ -10,6 +10,8 @@
 // Number of Decks between 1-8
 // Dealer Hits on 16 and Below
 // 
+
+
 //deck and cards
 
 var suits = ['hearts', 'clubs', 'spades', 'diamonds'];
@@ -17,13 +19,13 @@ var cards = [];
 var card;
 
 function makeDeck() {
-    for (var s = 0; s <= 3;) {
+    for (var suit = 0; suit <= 3;) {
 
         for (var x = 1; x <= 13;) {
             if (x <= 9) {
                 card = {
                     name: x,
-                    suit: suits[s],
+                    suit: suits[suit],
                     value: x,
                     active: true
                 };
@@ -32,7 +34,7 @@ function makeDeck() {
             } else if (x == 10) {
                 card = {
                     name: 'Jack',
-                    suit: suits[s],
+                    suit: suits[suit],
                     value: 10,
                     active: true
                 };
@@ -41,7 +43,7 @@ function makeDeck() {
             } else if (x == 11) {
                 card = {
                     name: 'Queen',
-                    suit: suits[s],
+                    suit: suits[suit],
                     value: 10,
                     active: true
                 };
@@ -50,7 +52,7 @@ function makeDeck() {
             } else if (x == 12) {
                 card = {
                     name: 'King',
-                    suit: suits[s],
+                    suit: suits[suit],
                     value: 10,
                     active: true
                 };
@@ -59,7 +61,7 @@ function makeDeck() {
             } else if (x == 13) {
                 card = {
                     name: 'Ace',
-                    suit: suits[s],
+                    suit: suits[suit],
                     value: 11,
                     active: true
                 };
@@ -67,7 +69,7 @@ function makeDeck() {
                 x++;
             }
         }
-        s++;
+        suit++;
     }
 }
 
@@ -105,7 +107,9 @@ var dealer = {
     name: 'Dealer',
     money: null,
     card1: '',
-    card2: ''
+    card2: '',
+    card1value: '',
+    card2value: ''
 };
 
 var _numberOfDecks = 1; // 1-8 max
@@ -128,35 +132,21 @@ var selectCard = cards[Math.floor(Math.random() * cards.length)];
 var selectSecondCard = cards[Math.floor(Math.random() * cards.length)];
 
 function playGame(player, total) {
-    console.log(player + " has dealt:");
     if (selectCard.active === true && selectSecondCard.active === true) {
-        console.log(selectCard.name + ' ' + selectCard.suit + ' and ' + selectSecondCard.name + ' ' + selectSecondCard.suit);
         selectCard.active = false;
         selectSecondCard.active = false;
         total = selectCard.value + selectSecondCard.value;
         console.log(player + ' has a total of ' + total);
-        //edit this to consider dealers hand
-        if (total < 16 && dealer.value < 7) {
-            onHit(player, total);
-        }
     } else {
         selectCard = cards[Math.floor(Math.random() * cards.length)];
         selectSecondCard = cards[Math.floor(Math.random() * cards.length)];
-        console.log(selectCard.name + ' ' + selectCard.suit + ' and ' + selectSecondCard.name + ' ' + selectSecondCard.suit);
         selectCard.active = false;
         selectSecondCard.active = false;
         total = selectCard.value + selectSecondCard.value;
         console.log(player + ' has a total of ' + total);
-        //edit this to consider dealers hand
-        if (total < 16 && dealer.value < 7) {
-            onHit(player, total);
-        } else {
-            console.log(player + ' has decided to stay.');
-        }
-
-
     }
 }
+
 //edit this to consider dealers hand
 function onHit(player, total) {
     if (selectCard.active === true) {
@@ -177,12 +167,36 @@ function onHit(player, total) {
 }
 
 
-/* function evaluateCards(player, playerValue) {
-    if (dealer.value && playerValue <= 21) {}
-} */
-
-while (_rounds > 0) {
-    console.log(playGame(dealer.name, dealer.total));
-    console.log(playGame(player1.name, player1.total));
-    _rounds--;
+function evaluateCards() {
+    while (_rounds > 0) {
+        playGame(dealer.name, dealer.total);
+        dealer.card1 = selectCard.name;
+        dealer.card2 = selectSecondCard.name;
+        dealer.card1value = selectCard.value;
+        dealer.card2value = selectSecondCard.value;
+        dealerTotal = selectCard.value+ selectSecondCard.value; 
+        console.log(playGame(player1.name, p1Total));
+        p1Total = selectCard.value+ selectSecondCard.value;
+        player1.card2 = selectSecondCard.name;
+        player1.card1 = selectCard.name;
+        console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + player1.name + " has a hand of " 
+        + player1.card1 + " and " + player1.card2 + " with a total value of: " + p1Total);
+        
+        
+        /*  console.log(playGame(player2.name, player2.total));
+          player2.card2 = selectSecondCard.value;
+          player2.card1 = selectCard.value;
+          console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + Player2.name+ " has a hand of " + player2.card1 + " and " + player2.card2);
+          console.log(playGame(player3.name, player3.total));
+          player3.card2 = selectSecondCard.value;
+          player3.card1 = selectCard.value;
+          console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + Player3.name+ " has a hand of " + player3.card1 + " and " + player3.card2);
+          console.log(playGame(player4.name, player4.total));
+          player4.card2 = selectSecondCard.value;
+          player4.card1 = selectCard.value;
+          console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + Player4.name+ " has a hand of " + player4.card1 + " and " + player4.card2);*/
+        _rounds--;
+    }
 }
+
+evaluateCards();

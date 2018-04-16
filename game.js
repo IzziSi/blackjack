@@ -17,6 +17,54 @@
 var suits = ['hearts', 'clubs', 'spades', 'diamonds'];
 var cards = [];
 var card;
+var _numberOfDecks = 1; // 1-8 max
+var _rounds = 20;
+var createDeck = _numberOfDecks;
+
+//   Players
+
+var player1 = {
+    name: 'Heuy',
+    money: 200,
+    card1: '',
+    card2: ''
+};
+
+var player2 = {
+    name: 'Dewey',
+    money: 200,
+    card1: '',
+    card2: ''
+};
+
+var player3 = {
+    name: 'Lewey',
+    money: 200,
+    card1: '',
+    card2: ''
+};
+
+var player4 = {
+    name: 'Scrooge',
+    money: 200,
+    card1: '',
+    card2: ''
+};
+var dealer = {
+    name: 'Dealer',
+    money: null,
+    card1: '',
+    card2: '',
+    card1value: '',
+    card2value: ''
+};
+
+var p1Total;
+var p2Total;
+var p3Total;
+var p4Total;
+var dealerTotal;
+
 
 function makeDeck() {
     for (var suit = 0; suit <= 3;) {
@@ -74,52 +122,7 @@ function makeDeck() {
 }
 
 
-//   Players
 
-var player1 = {
-    name: 'Heuy',
-    money: 200,
-    card1: '',
-    card2: ''
-};
-
-var player2 = {
-    name: 'Dewey',
-    money: 200,
-    card1: '',
-    card2: ''
-};
-
-var player3 = {
-    name: 'Lewey',
-    money: 200,
-    card1: '',
-    card2: ''
-};
-
-var player4 = {
-    name: 'Scrooge',
-    money: 200,
-    card1: '',
-    card2: ''
-};
-var dealer = {
-    name: 'Dealer',
-    money: null,
-    card1: '',
-    card2: '',
-    card1value: '',
-    card2value: ''
-};
-
-var _numberOfDecks = 1; // 1-8 max
-var _rounds = 20;
-var createDeck = _numberOfDecks;
-var p1Total;
-var p2Total;
-var p3Total;
-var p4Total;
-var dealerTotal;
 
 // game
 
@@ -148,7 +151,7 @@ function playGame(player, total) {
 }
 
 //edit this to consider dealers hand
-function onHit(player, total) {
+/* function onHit(player, total) {
     if (selectCard.active === true) {
         selectCard = cards[Math.floor(Math.random() * cards.length)];
         console.log(player + ' hits, drawing ' + selectCard.name + ' ' + selectCard.suit);
@@ -165,7 +168,7 @@ function onHit(player, total) {
         console.log(player + "'s new total is: " + total);
     }
 }
-
+ */
 
 function evaluateCards() {
     while (_rounds > 0) {
@@ -174,27 +177,12 @@ function evaluateCards() {
         dealer.card2 = selectSecondCard.name;
         dealer.card1value = selectCard.value;
         dealer.card2value = selectSecondCard.value;
-        dealerTotal = selectCard.value+ selectSecondCard.value; 
+        dealerTotal = selectCard.value + selectSecondCard.value;
         console.log(playGame(player1.name, p1Total));
-        p1Total = selectCard.value+ selectSecondCard.value;
+        p1Total = selectCard.value + selectSecondCard.value;
         player1.card2 = selectSecondCard.name;
         player1.card1 = selectCard.name;
-        console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + player1.name + " has a hand of " 
-        + player1.card1 + " and " + player1.card2 + " with a total value of: " + p1Total);
-        
-        
-        /*  console.log(playGame(player2.name, player2.total));
-          player2.card2 = selectSecondCard.value;
-          player2.card1 = selectCard.value;
-          console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + Player2.name+ " has a hand of " + player2.card1 + " and " + player2.card2);
-          console.log(playGame(player3.name, player3.total));
-          player3.card2 = selectSecondCard.value;
-          player3.card1 = selectCard.value;
-          console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + Player3.name+ " has a hand of " + player3.card1 + " and " + player3.card2);
-          console.log(playGame(player4.name, player4.total));
-          player4.card2 = selectSecondCard.value;
-          player4.card1 = selectCard.value;
-          console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + Player4.name+ " has a hand of " + player4.card1 + " and " + player4.card2);*/
+        console.log(dealer.name + "'s first card is " + dealer.card1 + ". " + player1.name + " has a hand of " + player1.card1 + " and " + player1.card2 + " with a total value of: " + p1Total);
         _rounds--;
     }
 }

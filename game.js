@@ -163,26 +163,6 @@ function dealCards(player, total) {
     }
 }
 
-//edit this to consider dealers hand
-/* function onHit(player, total) {
-    if (selectCard.active === true) {
-        selectCard = cards[Math.floor(Math.random() * cards.length)];
-        console.log(player + ' hits, drawing ' + selectCard.name + ' ' + selectCard.suit);
-        selectCard.active = false;
-        selectSecondCard.active = false;
-        total = selectCard.value + total;
-        console.log(player + "'s new total is: " + total);
-    } else {
-        selectCard = cards[Math.floor(Math.random() * cards.length)];
-        console.log(player + ' hits, drawing ' + selectCard.name + ' ' + selectCard.suit);
-        selectCard.active = false;
-        selectSecondCard.active = false;
-        total = selectCard.value + total;
-        console.log(player + "'s new total is: " + total);
-    }
-}
- */
-
 function dealToDealer() {
     dealCards(dealer.name, dealer.total);
     dealer.card1 = selectCard.name;
@@ -196,6 +176,9 @@ function dealToDealer() {
 
 function dealToPlayers() {
     players.forEach(player => {
+        if (player.money < 15) {
+            console.log(player.name + " has less than $15 and cannot play.");
+        } else {
             selectCard = cards[Math.floor(Math.random() * cards.length)];
             selectSecondCard = cards[Math.floor(Math.random() * cards.length)];
             selectCard.active = false;
@@ -209,20 +192,87 @@ function dealToPlayers() {
             player.total = selectCard.value + selectSecondCard.value;
             console.log(player.name + " has a hand of " + player.card1 + " of " + player.card1Suit + " and " + player.card2 + " of " + player.card2Suit + " with a total value of: " + player.total);
         }
-    }
+    });
+}
 
-
-    function evaluateCards() {
-        while (_rounds > 0) {
-            dealToDealer();
-            console.log(dealer.name + "'s first card is " + dealer.card1 + " of " + dealer.card1Suit + ". ");
-            _rounds--;
+function evaluateHit() {
+    players.forEach(player => {
+        while (dealer.card1 <= 5 && player.total <= 11) {
+            selectCard = cards[Math.floor(Math.random() * cards.length)];
+            player.total = player.total + selectCard.value;
+            console.log(player.name + " hit. Dealer deals " + selectCard.name + " of " + selectCard.suit + " totaling " + player.name + " to " + player.total);
         }
+    });
+}
+
+function evaluateDealerHit() {
+    while (dealerTotal < 17) {
+        selectCard = cards[Math.floor(Math.random() * cards.length)];
+        dealerTotal = dealerTotal + selectCard.value;
+        console.log(dealer.name + " hit. Dealer deals " + selectCard.name + " of " + selectCard.suit + " totaling " + dealer.name + " to " + dealerTotal);
     }
+}
 
-    evaluateCards();
+function evaluateWinningHand() {
+    players.forEach(player => {
+        if (player.money < 15) {
+        } else {
+            if (dealerTotal === 21 && player.total === 21) {
+                console.log("Push. " + player.name + "gets money back.");
+            } else if (dealerTotal === 21 && player.total < 21) {
+                if (dealer.card1value === 10 || 11 && dealer.card2value === 10 || 11) {
+                    console.log(dealer.name + " has blackjack! " + player.name + " has lost his hand!");
+                } else {
+                    console.log(dealer.name + " has 21! " + player.name + " has lost his hand!");
+                    player.money = player.money - 15;
+                }
+            } else if (player.total === 21 && dealerTotal < 21) {
+                if (player.card1value === 10 || 11 && player.card2value === 10 || 11) {
+                    console.log(player.name + " has blackjack! " + dealer.name + " has lost his hand!");
+                    player.money = player.money + 15;
+                } else {
+                    console.log(player.name + " has 21! " + dealer.name + " has lost his hand!");
+                    player.money = player.money + 15;
+                }
+            } else if (player.total > 21) {
+                console.log(player.name + " BUST! It's a loss!");
+                player.money = player.money - 15;
+            } else if (dealer.total > 21) {
+                console.log(dealer.name + " BUST! It's a win!");
+                player.money = player.money + 15;
+            } else if (player.total > dealerTotal) {
+                console.log(player.name + " wins!");
+                player.money = player.money + 15;
+            } else {
+                console.log(dealer.name + " wins! " + player.name + " lost!");
+                player.money = player.money - 15;
+            }
+        }
+    });
+}
+
+function playersMoneyAfterGame() {
+    players.forEach(player => {console.log(player.name + " has $" + player.money + ".");} );
+}
+
+function evaluateCards() {
+    while (_rounds > 0) {
+        dealToDealer();
+        console.log(dealer.name + "'s first card is " + dealer.card1 + " of " + dealer.card1Suit + ". ");
+        dealToPlayers();
+        evaluateHit();
+        console.log(dealer.name + "'s second card is " + dealer.card2 + " of " + dealer.card2Suit + " with a total value of: " + dealerTotal);
+        evaluateDealerHit();
+        evaluateWinningHand();
+        playersMoneyAfterGame();
+        _rounds--;
+        
+    }
+}
+
+evaluateCards();
 
 
-    /*
-    create player array
-    use foreach to evaluateCards per person */
+/*
+create player array
+use foreach to evaluateCards per person */

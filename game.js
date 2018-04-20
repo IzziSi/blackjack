@@ -18,11 +18,10 @@ var suits = ['hearts', 'clubs', 'spades', 'diamonds'];
 var cards = [];
 var card;
 var _numberOfDecks = 1; // 1-8 max
-var _rounds = 20;
+var _rounds = 50;
 var createDeck = _numberOfDecks;
 
 //   Players
-
 var players = [{
         name: 'Heuy',
         money: 200,
@@ -73,7 +72,8 @@ var dealer = {
     card2value: '',
     card1Suit: '',
     card2Suit: ''
-}
+};
+
 var p1Total;
 var p2Total;
 var p3Total;
@@ -82,9 +82,9 @@ var dealerTotal;
 
 
 function makeDeck() {
-    for (var suit = 0; suit <= 3;) {
+    for (var suit = 0; suit <= 3;suit++) {
 
-        for (var x = 1; x <= 13;) {
+        for (var x = 2; x <= 13;x++) {
             if (x <= 9) {
                 card = {
                     name: x,
@@ -93,7 +93,6 @@ function makeDeck() {
                     active: true
                 };
                 cards.push(card);
-                x++;
             } else if (x == 10) {
                 card = {
                     name: 'Jack',
@@ -102,7 +101,6 @@ function makeDeck() {
                     active: true
                 };
                 cards.push(card);
-                x++;
             } else if (x == 11) {
                 card = {
                     name: 'Queen',
@@ -111,7 +109,6 @@ function makeDeck() {
                     active: true
                 };
                 cards.push(card);
-                x++;
             } else if (x == 12) {
                 card = {
                     name: 'King',
@@ -120,7 +117,6 @@ function makeDeck() {
                     active: true
                 };
                 cards.push(card);
-                x++;
             } else if (x == 13) {
                 card = {
                     name: 'Ace',
@@ -129,10 +125,9 @@ function makeDeck() {
                     active: true
                 };
                 cards.push(card);
-                x++;
             }
         }
-        suit++;
+        
     }
 }
 
@@ -197,7 +192,7 @@ function dealToPlayers() {
 
 function evaluateHit() {
     players.forEach(player => {
-        while (dealer.card1 <= 5 && player.total <= 11) {
+        while (dealer.card1 <= 9 && player.total <= 11) {
             selectCard = cards[Math.floor(Math.random() * cards.length)];
             player.total = player.total + selectCard.value;
             console.log(player.name + " hit. Dealer deals " + selectCard.name + " of " + selectCard.suit + " totaling " + player.name + " to " + player.total);
@@ -237,7 +232,7 @@ function evaluateWinningHand() {
             } else if (player.total > 21) {
                 console.log(player.name + " BUST! It's a loss!");
                 player.money = player.money - 15;
-            } else if (dealer.total > 21) {
+            } else if (dealerTotal > 21) {
                 console.log(dealer.name + " BUST! It's a win!");
                 player.money = player.money + 15;
             } else if (player.total > dealerTotal) {
@@ -269,10 +264,5 @@ function evaluateCards() {
         
     }
 }
-
 evaluateCards();
 
-
-/*
-create player array
-use foreach to evaluateCards per person */
